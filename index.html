@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scaling Beyond Yourself™ — The Founder Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F0E8;
+    --warm-white: #FAF7F2;
+    --ink: #1A1714;
+    --ink-soft: #2E2925;
+    --gold: #B8975A;
+    --gold-light: #D4AF72;
+    --muted: #7A7068;
+    --rule: rgba(184, 151, 90, 0.25);
+    --rule-soft: rgba(26,23,20,0.1);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.5rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(245, 240, 232, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-logo span {
+    color: var(--gold);
+  }
+
+  .nav-cta {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 2px;
+    transition: opacity 0.2s;
+  }
+
+  .nav-cta:hover { opacity: 0.65; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 6rem;
+    position: relative;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.3s;
+  }
+
+  .hero-label::before,
+  .hero-label::after {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-label span {
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(3.2rem, 7vw, 6rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    max-width: 820px;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.4s;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-hook {
+    font-family: var(--serif);
+    font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted);
+    max-width: 620px;
+    margin-bottom: 1.5rem;
+    line-height: 1.65;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.55s;
+  }
+
+  .hero-sub {
+    font-size: 0.9rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.7s;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: var(--ink);
+    text-decoration: none;
+    padding: 1.1rem 2.8rem;
+    border: 1px solid var(--ink);
+    transition: background 0.3s, color 0.3s;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.85s;
+  }
+
+  .btn-primary:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .btn-outline {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: transparent;
+    text-decoration: none;
+    padding: 1.1rem 2.8rem;
+    border: 1px solid var(--ink);
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .btn-outline:hover {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .availability-note {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 1.2rem;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 1s;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 7rem 2rem;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .container-narrow {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .container-wide {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-rule {
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 2rem;
+  }
+
+  .section-label {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  h2 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  h3 {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  /* DARK SECTION */
+  .dark-section {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 7rem 2rem;
+  }
+
+  .dark-section h2 {
+    color: var(--cream);
+  }
+
+  .dark-section .section-label {
+    color: var(--gold);
+  }
+
+  .dark-section .section-rule {
+    background: var(--gold);
+  }
+
+  /* PROMISE SECTION */
+  .promise {
+    background: var(--warm-white);
+    border-top: 1px solid var(--rule-soft);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
+  .promise-text {
+    font-family: var(--serif);
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .promise-text strong {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* QUESTIONS SECTION */
+  .questions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .question-item {
+    padding: 1.75rem 2rem;
+    border: 1px solid var(--rule-soft);
+    background: var(--warm-white);
+    position: relative;
+  }
+
+  .question-item::before {
+    content: '✦';
+    display: block;
+    color: var(--gold);
+    font-size: 0.55rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+
+  .question-item p {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .inflection-note {
+    margin-top: 3rem;
+    text-align: center;
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  .inflection-note strong {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  /* WHO ITS FOR */
+  .for-list {
+    list-style: none;
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .for-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--cream);
+    opacity: 0.88;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(245,240,232,0.08);
+  }
+
+  .for-list li:last-child {
+    border-bottom: none;
+  }
+
+  .for-list li::before {
+    content: '→';
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    font-size: 0.85rem;
+  }
+
+  /* WHAT WE LOOK AT */
+  .look-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    margin-top: 3.5rem;
+  }
+
+  .look-item {
+    background: var(--warm-white);
+    padding: 2rem 1.75rem;
+    border: 1px solid var(--rule-soft);
+  }
+
+  .look-item .num {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--rule-soft);
+    display: block;
+    margin-bottom: 1rem;
+    line-height: 1;
+  }
+
+  .look-item p {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.75;
+  }
+
+  /* BLUEPRINT SECTION */
+  .blueprint {
+    background: var(--ink-soft);
+    color: var(--cream);
+    padding: 7rem 2rem;
+  }
+
+  .blueprint h2 {
+    color: var(--cream);
+  }
+
+  .blueprint .section-label {
+    color: var(--gold);
+  }
+
+  .blueprint-card {
+    margin-top: 3.5rem;
+    border: 1px solid rgba(184,151,90,0.3);
+    padding: 3.5rem;
+    position: relative;
+  }
+
+  .blueprint-card::before {
+    content: 'Scale-Up Blueprint™';
+    position: absolute;
+    top: -0.6rem;
+    left: 2rem;
+    background: var(--ink-soft);
+    padding: 0 0.75rem;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .blueprint-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .blueprint-list li {
+    font-size: 0.88rem;
+    color: rgba(245,240,232,0.8);
+    line-height: 1.6;
+    padding-left: 1.25rem;
+    position: relative;
+  }
+
+  .blueprint-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+  }
+
+  .blueprint-includes {
+    padding-top: 2rem;
+    border-top: 1px solid rgba(184,151,90,0.2);
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .blueprint-includes .include-item {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .blueprint-includes .include-item::before {
+    content: '✦';
+    font-size: 0.5rem;
+  }
+
+  /* IMAGINE SECTION */
+  .imagine-section {
+    background: var(--warm-white);
+    border-top: 1px solid var(--rule-soft);
+    border-bottom: 1px solid var(--rule-soft);
+    padding: 7rem 2rem;
+    text-align: center;
+  }
+
+  .imagine-text {
+    font-family: var(--serif);
+    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.75;
+    color: var(--ink-soft);
+    max-width: 640px;
+    margin: 2rem auto 0;
+  }
+
+  .imagine-text strong {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* WHAT HAPPENS AFTER */
+  .after-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    margin-top: 3.5rem;
+    background: var(--rule-soft);
+  }
+
+  .after-item {
+    background: var(--cream);
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+
+  .after-item .after-icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    color: var(--gold);
+    font-size: 0.75rem;
+  }
+
+  .after-item h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-family: var(--serif);
+  }
+
+  .after-item p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* CTA SECTION */
+  .cta-section {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 9rem 2rem;
+    text-align: center;
+  }
+
+  .cta-section h2 {
+    color: var(--cream);
+    max-width: 640px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .cta-section p {
+    font-size: 0.9rem;
+    color: rgba(245,240,232,0.65);
+    max-width: 440px;
+    margin: 0 auto 3rem;
+    line-height: 1.8;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--gold);
+    text-decoration: none;
+    padding: 1.25rem 3.5rem;
+    border: 1px solid var(--gold);
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+  }
+
+  .cta-btn:hover {
+    background: transparent;
+    color: var(--gold);
+  }
+
+  .cta-note {
+    margin-top: 1.5rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.35);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    border-top: 1px solid rgba(245,240,232,0.06);
+    padding: 2.5rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-logo {
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: rgba(245,240,232,0.6);
+  }
+
+  .footer-copy {
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: rgba(245,240,232,0.3);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer-links a {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.35);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--gold); }
+
+  /* DIVIDER */
+  .ornament {
+    text-align: center;
+    color: var(--gold);
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    padding: 1rem 0;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.75s ease, transform 0.75s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .questions-grid { grid-template-columns: 1fr; }
+    .look-grid { grid-template-columns: 1fr; }
+    .blueprint-list { grid-template-columns: 1fr; }
+    .after-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .blueprint-card { padding: 2rem 1.5rem; }
+    .blueprint-includes { justify-content: center; }
+  }
+
+  @media (max-width: 560px) {
+    nav { padding: 1rem; }
+    .hero { padding: 7rem 1.25rem 5rem; }
+    section { padding: 5rem 1.25rem; }
+    .dark-section, .blueprint, .cta-section, .imagine-section { padding: 5rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://thefounderstudio.co/" class="nav-logo">The Founder <span>Studio.</span></a>
+  <a href="YOUR_CALENDAR_LINK_HERE" class="nav-cta" target="_blank" rel="noopener">Apply Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">
+    <span>The Founder Studio — Flagship Offering</span>
+  </div>
+  <h1>Scaling Beyond<br>
+  <em>Yourself</em>™</h1>
+  <p class="hero-hook">When was the last time you truly stepped away from your business — and knew it would be fine without you?</p>
+  <p class="hero-sub">Not checking Slack. Not answering "just one quick thing." Not carrying the business in the back of your mind the entire time.<br><br>If you're honest, it's probably been a while.</p>
+  <a href="YOUR_CALENDAR_LINK_HERE" class="btn-primary" target="_blank" rel="noopener">Apply for the Assessment</a>
+  <p class="availability-note">Limited availability to ensure depth and discretion.</p>
+</section>
+
+<!-- PROMISE -->
+<section class="promise">
+  <div class="container-narrow">
+    <div class="section-rule"></div>
+    <div class="section-label">The Core Promise</div>
+    <div class="promise-text reveal">
+      Growth isn't just about revenue.<br>
+      It's about whether the business can <strong>hold without you holding it up.</strong>
+      <br><br>
+      <strong>Scaling Beyond Yourself™</strong> helps founders see exactly where the business depends on them — and what must change to unlock real scale, freedom, and sustainability.
+    </div>
+  </div>
+</section>
+
+<!-- QUESTIONS -->
+<section style="background: var(--cream); padding: 7rem 2rem;">
+  <div class="container-wide">
+    <div class="section-rule reveal"></div>
+    <div class="section-label reveal">Questions Founders Are Quietly Asking</div>
+    <h2 class="reveal" style="text-align:center; margin-bottom: 0.5rem;">Sound familiar?</h2>
+    <div class="questions-grid">
+      <div class="question-item reveal">
+        <p>Why does everything still come back to me?</p>
+      </div>
+      <div class="question-item reveal">
+        <p>What would happen to my company if I stepped away for a week?</p>
+      </div>
+      <div class="question-item reveal">
+        <p>Why does my team still overly depend on me?</p>
+      </div>
+      <div class="question-item reveal">
+        <p>Do I need more people — or better structure?</p>
+      </div>
+      <div class="question-item reveal">
+        <p>Am I the bottleneck… or is something else off?</p>
+      </div>
+      <div class="question-item reveal">
+        <p>Why does growth feel this heavy?</p>
+      </div>
+    </div>
+    <p class="inflection-note reveal">If these questions sound familiar, you're at an <strong>inflection point</strong> — not a failure point.</p>
+  </div>
+</section>
+
+<!-- WHO ITS FOR -->
+<section class="dark-section">
+  <div class="container">
+    <div class="section-rule reveal"></div>
+    <div class="section-label reveal">Who This Is For</div>
+    <h2 class="reveal">Built for founders with an established team<br>who are <em>ready for the next chapter.</em></h2>
+    <ul class="for-list">
+      <li class="reveal">You have revenue, a team, and real traction — and yet everything still runs through you.</li>
+      <li class="reveal">Your people are capable, but overly dependent on your presence to move forward.</li>
+      <li class="reveal">You haven't fully unplugged in longer than you'd like to admit.</li>
+      <li class="reveal">You're thinking about sustainability and structure, not just speed and growth.</li>
+      <li class="reveal">You're ready to invest in getting out of your own way — and building something that lasts.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- WHAT WE LOOK AT -->
+<section style="background: var(--cream); padding: 7rem 2rem;">
+  <div class="container-wide">
+    <div class="section-rule reveal"></div>
+    <div class="section-label reveal">What We Look At</div>
+    <h2 class="reveal" style="text-align:center;">No fluff. No theory.<br><em>Just the truth.</em></h2>
+    <div class="look-grid">
+      <div class="look-item reveal">
+        <span class="num">01</span>
+        <p>Where the business relies on you — more than it should.</p>
+      </div>
+      <div class="look-item reveal">
+        <span class="num">02</span>
+        <p>What quietly breaks without your oversight or presence.</p>
+      </div>
+      <div class="look-item reveal">
+        <span class="num">03</span>
+        <p>Where decisions get stuck or default back to you.</p>
+      </div>
+      <div class="look-item reveal">
+        <span class="num">04</span>
+        <p>Which systems don't actually scale when pressure increases.</p>
+      </div>
+      <div class="look-item reveal">
+        <span class="num">05</span>
+        <p>Whether your team is set up to lead — or just execute.</p>
+      </div>
+      <div class="look-item reveal">
+        <span class="num">06</span>
+        <p>How decisions should flow without your constant involvement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMAGINE -->
+<section class="imagine-section">
+  <div class="container-narrow">
+    <div class="section-rule reveal"></div>
+    <div class="section-label reveal">Imagine This</div>
+    <p class="imagine-text reveal">
+      You take a real vacation and nothing stalls.<br>
+      <strong>Your team makes decisions you trust.</strong><br>
+      Your calendar opens up. Your energy comes back.<br><br>
+      The business runs. Growth continues.<br>
+      And you're finally <strong>working on the company again</strong> — not in it.
+    </p>
+    <p style="margin-top: 2rem; font-size: 0.82rem; letter-spacing: 0.08em; color: var(--muted); text-align: center;" class="reveal">This is what scaling is supposed to feel like.</p>
+  </div>
+</section>
+
+<!-- SCALE-UP BLUEPRINT -->
+<section class="blueprint">
+  <div class="container">
+    <div class="section-rule reveal"></div>
+    <div class="section-label reveal">What You Walk Away With</div>
+    <h2 class="reveal">A clear, visual map that shows you<br><em>exactly what must change.</em></h2>
+    <div class="blueprint-card reveal">
+      <ul class="blueprint-list">
+        <li>Where the business collapses without you</li>
+        <li>What fails first when you step back</li>
+        <li>What must be built to remove bottlenecks</li>
+        <li>A prioritized path forward — in the right order</li>
+        <li>How decisions should flow without you</li>
+        <li>Which structural gaps are costing you scale</li>
+      </ul>
+      <div class="blueprint-includes">
+        <span class="include-item">1–2 Live Working Sessions</span>
+        <span class="include-item">Real-Time Strategic Insight</span>
+        <span class="include-item">Delivery of the Scale-Up Blueprint™</span>
+      </div>
+    </div>
+    <p style="margin-top: 2rem; font-size: 0.82rem; color: rgba(245,240,232,0.45); text-align: center;" class="reveal">This isn't a report that sits in a folder. It's a clarity tool designed to change how you lead.</p>
+  </div>
+</section>
+
+<!-- WHAT HAPPENS AFTER -->
+<section style="background: var(--cream); padding: 7rem 2rem;">
+  <div class="container-wide">
+    <div class="section-rule reveal"></div>
+    <div class="section-label reveal">What Happens After</div>
+    <h2 class="reveal" style="text-align:center;">You'll have a clear path —<br><em>whether you continue with me or not.</em></h2>
+    <div class="after-grid">
+      <div class="after-item reveal">
+        <div class="after-icon">✦</div>
+        <h3>Founder Advisory</h3>
+        <p>Ongoing strategic partnership to hold the vision and navigate complexity as you grow.</p>
+      </div>
+      <div class="after-item reveal">
+        <div class="after-icon">→</div>
+        <h3>Strategic Support</h3>
+        <p>Intentional structure and accountability to ensure you don't recreate founder dependency.</p>
+      </div>
+      <div class="after-item reveal">
+        <div class="after-icon">◈</div>
+        <h3>AI-Enabled Systems</h3>
+        <p>An AI-powered strategy system to reinforce clarity and execution across your organization.</p>
+      </div>
+    </div>
+    <p style="margin-top: 2.5rem; text-align:center; font-size: 0.82rem; color: var(--muted);" class="reveal">No pressure. Just alignment.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+  <h2 class="reveal">If you want to build a business<br>you don't have to carry alone —</h2>
+  <p class="reveal">This is the starting point. A focused strategy experience tailored to how your business actually operates, designed for founders ready for the next chapter.</p>
+  <a href="YOUR_CALENDAR_LINK_HERE" class="cta-btn reveal" target="_blank" rel="noopener">→ Apply for Scaling Beyond Yourself™</a>
+  <p class="cta-note reveal">Limited availability · For founders ready to invest in getting out of their own way · Depth &amp; discretion guaranteed</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">The Founder Studio.</span>
+  <span class="footer-copy">© 2025 The Founder Studio · Strategy for those who build with purpose.</span>
+  <div class="footer-links">
+    <a href="#">LinkedIn</a>
+    <a href="#">Instagram</a>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
